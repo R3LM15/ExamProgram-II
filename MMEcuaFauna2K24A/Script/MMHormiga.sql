@@ -16,7 +16,7 @@ DROP TABLE IF EXISTS IngestaNativa;
 
 
 CREATE TABLE Hormiga (
-     Hormiga            INTEGER PRIMARY KEY autoincrement
+     IdHormiga            INTEGER PRIMARY KEY autoincrement
     ,IdSexo             INTEGER NOT NULL
     ,IdProvincia        INTEGER NOT NULL
     ,IdGenoAlimento     INTEGER NOT NULL
