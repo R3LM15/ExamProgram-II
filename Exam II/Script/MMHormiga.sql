@@ -55,7 +55,7 @@ CREATE TABLE Provincia (
 
 CREATE TABLE Sexo (
      IdSexo        INTEGER PRIMARY KEY autoincrement
-    ,Gnero         VARCHAR(50) NOT NULL
+    ,Genero         VARCHAR(50) NOT NULL
     ,FechaCrea     DATETIME DEFAULT (datetime('now', '-5 hours'))
 );   
 
@@ -73,3 +73,33 @@ CREATE TABLE IngestaNativa (
 
 
 
+INSERT INTO Sexo (Genero) VALUES 
+("Macho"),
+("Hembra"),
+("Asexual");
+
+INSERT INTO Pais (Nombre) VALUES 
+("Ecuador");
+
+INSERT INTO Region (Nombre) VALUES 
+("Costa"),
+("Sierra"),
+("Oriente"),
+("Galápagos");
+
+INSERT INTO Provincia (IdRegion , IdPais, Nombre) VALUES 
+(2,1,"Pichincha"),
+(2,1,"Azuay"),
+(4,1,"Isabela"),
+(3,1,"Napo");
+
+INSERT INTO GenoAlimento (NombreTipo) VALUES 
+("X"),
+("XX"),
+("XY");
+
+INSERT INTO IngestaNativa (Ingesta) VALUES 
+("Carnívoro"),
+("Herbívoro"),
+("Omnívoro"),
+("Insectívoros");
