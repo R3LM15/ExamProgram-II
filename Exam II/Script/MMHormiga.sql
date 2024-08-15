@@ -1,4 +1,4 @@
--- database: ../DataBase/MMHormiga.sqlite
+-- database: ../database/MMHormiga.sqlite
 /*
 CopyRight
 autor: Mateo Molina Moises Estrella
