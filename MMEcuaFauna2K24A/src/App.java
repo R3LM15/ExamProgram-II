@@ -1,18 +1,12 @@
-
-
-import UserInterface.Form.MainForm;
+import UserInterface.Form.MainWindow;
 
 public class App {
     
-public static String mmcedula = "1723451747" ;
-public static String mmnombres = "Mateo Molina";
-    public static void main(String[] args) throws Exception {
 
 
-    
-       MainForm MMpanel = new MainForm("EcuaFauna2K24A");
+    public static void main(String[] args) {
+        // Llamar al método main de la clase MainWindow para iniciar la aplicación
+        MainWindow.main(args);
 
-        System.out.println(mmcedula);
-        System.out.println(mmnombres);
     }
 }

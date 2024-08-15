@@ -31,6 +31,10 @@ public class HormigaDTO {
 
 
     public HormigaDTO(){}
+
+    public HormigaDTO(int aInt, int aInt0, int aInt1, int aInt2, String string, String string0, String string1, String string2, String string3) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
     
 
 
