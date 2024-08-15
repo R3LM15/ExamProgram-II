@@ -2,6 +2,7 @@ package UserInterface.Form;
 
 
 
+import UserInterface.IAStyle;
 import java.awt.*;
 import javax.swing.*;
 
@@ -71,45 +72,56 @@ public class MainWindow {
 
             // Crear el segundo panel (vacío por ahora)
             JPanel secondPanel = new JPanel();
-            secondPanel.setBackground(Color.WHITE);
-            secondPanel.setPreferredSize(new Dimension(600, 150));
+            //secondPanel.setBackground(Color.white); 
+            secondPanel.setPreferredSize(new Dimension(600, 65));
 
+            // Usar un BorderLayout para organizar los componentes
+            secondPanel.setLayout(new BorderLayout(10, 10)); // Espaciado entre los componentes
 
-           
+            // Crear un panel para el logo y el texto
+            JPanel leftPanel = new JPanel();
+            //leftPanel.setBackground(Color.WHITE);
+            leftPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10)); // Alineación a la izquierda con espaciado
 
-            secondPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 60, 10)); // Usar FlowLayout para alinear elementos
+            // Cargar y redimensionar el logo
+            ImageIcon logoIcon = new ImageIcon(IAStyle.URL_LOGO); // Cambia el path a tu imagen
+            Image logoImage = logoIcon.getImage();
+            Image resizedLogoImage = logoImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH); // Ajustar tamaño (ancho, alto)
+            ImageIcon resizedLogoIcon = new ImageIcon(resizedLogoImage);
 
-            // Cargar el logo
-            ImageIcon logoIcon = new ImageIcon("Logo.png"); // Cambia el path a tu imagen
-            JLabel logoLabel = new JLabel(logoIcon);
+            JLabel logoLabel = new JLabel(resizedLogoIcon);
 
-            // Crear el texto y el botón
+            // Etiqueta de texto
             JLabel textLabel = new JLabel("Hormiguero virtual");
-            textLabel.setForeground(Color.blue);
+            textLabel.setForeground(Color.BLUE);
 
+            // Añadir componentes al panel izquierdo
+            leftPanel.add(logoLabel);
+            leftPanel.add(textLabel);
+
+            // Crear un panel para el botón
+            JPanel rightPanel = new JPanel();
+            //rightPanel.setBackground(Color.white);
+            rightPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10)); // Alineación a la derecha con espaciado
 
             JButton createButton = new JButton("Crear Hormiga larva");
             createButton.setBackground(Color.DARK_GRAY);
             createButton.setForeground(Color.WHITE);
-            createButton.setPreferredSize(new Dimension(300, 40));
+            createButton.setPreferredSize(new Dimension(300, 40)); // Ajuste del tamaño del botón
             createButton.setFocusPainted(false); // Elimina el borde de enfoque del botón
 
-            // Añadir componentes al segundo panel
-            secondPanel.add(logoLabel);
-            secondPanel.add(textLabel);
-            secondPanel.add(createButton);
+            // Añadir el botón al panel derecho
+            rightPanel.add(createButton);
 
-
-
-
-
+            // Añadir los paneles al segundo panel usando BorderLayout
+            secondPanel.add(leftPanel, BorderLayout.WEST);
+            secondPanel.add(rightPanel, BorderLayout.EAST);
 
             // Añadir el segundo panel a la ventana
             gbc.gridy = 1;
             gbc.weighty = 0.1;
             frame.add(secondPanel, gbc);
-
-
+// Crear el Segundo panel
 
              //---------------------------------------------------------------------------------------------------------
 
