@@ -254,16 +254,14 @@ public class MMRegisto extends JPanel {
                 String tipoHormiga = textFields[row][4].getText().trim();
                 String estado = textFields[row][5].getText().trim();
         
-                // Verificar que los campos no estén vacíos y contengan solo números válidos
-                if (idSexoText.isEmpty() || idProvinciaText.isEmpty() || idGenoAlimentoText.isEmpty() || idIngestaNativaText.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos numéricos.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-        
+                
+    
                 int idSexo;
                 int idProvincia;
                 int idGenoAlimento;
                 int idIngestaNativa;
+    
+                // Intentar convertir los textos a enteros
                 try {
                     idSexo = Integer.parseInt(idSexoText);
                     idProvincia = Integer.parseInt(idProvinciaText);
@@ -273,21 +271,27 @@ public class MMRegisto extends JPanel {
                     JOptionPane.showMessageDialog(this, "Uno o más campos numéricos tienen un formato inválido. Asegúrate de que los campos numéricos contengan solo números enteros.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-        
+        /* 
                 // Verificar que tipoHormiga y estado no estén vacíos
                 if (tipoHormiga.isEmpty() || estado.isEmpty()) {
                     JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos de texto.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-        
+        */
                 // Crear el objeto DTO con la fecha actual
                 HormigaDTO dto = new HormigaDTO(idSexo, idProvincia, idGenoAlimento, idIngestaNativa, tipoHormiga, estado, fechaCrea);
         
                 // Guardar en la base de datos
-                dao.create(dto);
+                // Verificar que los campos numéricos no estén vacíos
+                if (idSexoText.isEmpty() || idProvinciaText.isEmpty() || idGenoAlimentoText.isEmpty() || idIngestaNativaText.isEmpty()||tipoHormiga.isEmpty() || estado.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos numéricos y de texto ", "Error", JOptionPane.ERROR_MESSAGE);
+                }else{
+                    dao.create(dto);
+                    JOptionPane.showMessageDialog(this, "Datos guardados exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         
-            JOptionPane.showMessageDialog(this, "Datos guardados exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            
         
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al guardar los datos en la base de datos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -296,5 +300,7 @@ public class MMRegisto extends JPanel {
         }
     }
     
-}
 
+
+
+}
