@@ -2,7 +2,7 @@ package UserInterface.Form;
 
 import DataAccess.DTO.HormigaDTO;
 import DataAccess.HormigaDAO;
-import UserInterface.IAStyle;
+import UserInterface.MMStyle;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +18,12 @@ public class MMRegisto extends JPanel {
 
     // Variables para el JTable
     private DefaultTableModel tableModel;
+    private JTable table; // Agregado para acceder a la tabla en otros métodos
     private int currentID; // Variable para almacenar el ID secuencial
+
+    // Variables para guardar la opción seleccionada
+    private String selectedGenoAlimento = "<GenoAlimento>";
+    private String selectedIngestaNativa = "<IngestaNativa>";
 
     public MMRegisto() {
         setLayout(new GridBagLayout());
@@ -34,7 +39,7 @@ public class MMRegisto extends JPanel {
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 10));
 
-        ImageIcon logoIcon = new ImageIcon(IAStyle.URL_LOGO);
+        ImageIcon logoIcon = new ImageIcon(MMStyle.URL_LOGO);
         Image logoImage = logoIcon.getImage();
         Image resizedLogoImage = logoImage.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         ImageIcon resizedLogoIcon = new ImageIcon(resizedLogoImage);
@@ -67,7 +72,7 @@ public class MMRegisto extends JPanel {
         // Crear el JTable y el modelo
         String[] columnNames = {"ID", "Sexo", "Provincia", "GenoAlimento", "IngestaNativa", "TipoHormiga", "Estado"};
         tableModel = new DefaultTableModel(columnNames, 0);
-        JTable table = new JTable(tableModel);
+        table = new JTable(tableModel); // Inicializar el JTable
         table.setGridColor(Color.DARK_GRAY);
         table.setBackground(Color.GRAY);
         table.setForeground(Color.WHITE);
@@ -88,47 +93,63 @@ public class MMRegisto extends JPanel {
         GridBagConstraints gbcFourth = new GridBagConstraints();
         gbcFourth.insets = new Insets(10, 5, 10, 5);
 
-        JButton leftButton1 = new JButton("<GenoAlimento>");
+        JButton leftButton1 = new JButton(selectedGenoAlimento);
         leftButton1.setBackground(Color.GRAY);
         leftButton1.setForeground(Color.WHITE);
         leftButton1.setPreferredSize(new Dimension(150, 50));
         leftButton1.setFocusPainted(false);
 
-        JButton leftButton2 = new JButton("<IngestaNativa>");
+        JButton leftButton2 = new JButton(selectedIngestaNativa);
         leftButton2.setBackground(Color.GRAY);
         leftButton2.setForeground(Color.WHITE);
         leftButton2.setPreferredSize(new Dimension(150, 50));
         leftButton2.setFocusPainted(false);
 
         JPopupMenu popupMenu1 = new JPopupMenu();
-        JMenuItem option1_1 = new JMenuItem("Opción 1.1");
-        JMenuItem option1_2 = new JMenuItem("Opción 1.2");
+        // Actualizar opciones del menú emergente
+        JMenuItem option1_1 = new JMenuItem("<GenoAlimento>");
+        JMenuItem option1_2 = new JMenuItem("XY");
+        JMenuItem option1_3 = new JMenuItem("XX"); 
         popupMenu1.add(option1_1);
         popupMenu1.add(option1_2);
+        popupMenu1.add(option1_3);
 
         JPopupMenu popupMenu2 = new JPopupMenu();
-        JMenuItem option2_1 = new JMenuItem("Opción 2.1");
-        JMenuItem option2_2 = new JMenuItem("Opción 2.2");
+        // Actualizar opciones del menú emergente
+        JMenuItem option2_1 = new JMenuItem("<IngestaNativa>");
+        JMenuItem option2_2 = new JMenuItem("Carnivoro");
+        JMenuItem option2_3 = new JMenuItem("Herbivoro");
+        JMenuItem option2_4 = new JMenuItem("Omnivoro");
+        JMenuItem option2_5 = new JMenuItem("Insectivoros");
         popupMenu2.add(option2_1);
         popupMenu2.add(option2_2);
+        popupMenu2.add(option2_3);
+        popupMenu2.add(option2_4);
+        popupMenu2.add(option2_5);
 
-        // ActionListener para actualizar la columna correspondiente
-        ActionListener updateColumn = e -> {
+        // ActionListener para actualizar el texto del botón
+        ActionListener updateSelectedOption = e -> {
             JMenuItem source = (JMenuItem) e.getSource();
             String selectedOption = source.getText();
 
-            // Determine which button was clicked and which column to update
+            // Determine qué botón fue clicado y actualiza el texto del botón
             if (source.getParent() == popupMenu1) {
-                updateColumnWithText(3, selectedOption); // Columna "GenoAlimento"
+                selectedGenoAlimento = selectedOption;
+                leftButton1.setText(selectedGenoAlimento);
             } else if (source.getParent() == popupMenu2) {
-                updateColumnWithText(4, selectedOption); // Columna "IngestaNativa"
+                selectedIngestaNativa = selectedOption;
+                leftButton2.setText(selectedIngestaNativa);
             }
         };
 
-        option1_1.addActionListener(updateColumn);
-        option1_2.addActionListener(updateColumn);
-        option2_1.addActionListener(updateColumn);
-        option2_2.addActionListener(updateColumn);
+        option1_1.addActionListener(updateSelectedOption);
+        option1_2.addActionListener(updateSelectedOption);
+        option1_3.addActionListener(updateSelectedOption);
+        option2_1.addActionListener(updateSelectedOption);
+        option2_2.addActionListener(updateSelectedOption);
+        option2_3.addActionListener(updateSelectedOption);
+        option2_4.addActionListener(updateSelectedOption);
+        option2_5.addActionListener(updateSelectedOption);
 
         leftButton1.addActionListener(e -> popupMenu1.show(leftButton1, 0, leftButton1.getHeight()));
         leftButton2.addActionListener(e -> popupMenu2.show(leftButton2, 0, leftButton2.getHeight()));
@@ -144,6 +165,17 @@ public class MMRegisto extends JPanel {
         createButton2.setForeground(Color.WHITE);
         createButton2.setPreferredSize(new Dimension(300, 50));
         createButton2.setFocusPainted(false);
+
+        // ActionListener para los botones de alimentación
+        createButton1.addActionListener(e -> {
+            updateColumnWithText(3, selectedGenoAlimento);
+            checkAndUpdateRow();
+        });
+
+        createButton2.addActionListener(e -> {
+            updateColumnWithText(4, selectedIngestaNativa);
+            checkAndUpdateRow();
+        });
 
         gbcFourth.gridx = 0;
         gbcFourth.gridy = 0;
@@ -200,6 +232,14 @@ public class MMRegisto extends JPanel {
             }
         });
 
+        // Agregar el ActionListener para el botón "ELIMINAR"
+        exitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteSelectedRow();
+            }
+        });
+
         fifthPanel.add(saveButton);
         fifthPanel.add(exitButton);
 
@@ -230,8 +270,8 @@ public class MMRegisto extends JPanel {
         // Datos predeterminados
         String sexo = "asexual";
         String provincia = getRandomProvincia();
-        String genoAlimento = "";
-        String ingestaNativa = "";
+        String genoAlimento = selectedGenoAlimento;
+        String ingestaNativa = selectedIngestaNativa;
         String tipoHormiga = "larva";
         String estado = "viva";
 
@@ -246,64 +286,234 @@ public class MMRegisto extends JPanel {
         return provincias[random.nextInt(provincias.length)];
     }
 
-    // Método para actualizar la columna con la opción seleccionada
+    // Método para actualizar la columna con el texto seleccionado
     private void updateColumnWithText(int columnIndex, String text) {
-        for (int row = 0; row < tableModel.getRowCount(); row++) {
-            tableModel.setValueAt(text, row, columnIndex);
+        int selectedRow = table.getSelectedRow(); // Obtener la fila seleccionada
+        if (selectedRow != -1) { // Verificar si hay una fila seleccionada
+            String estado = (String) tableModel.getValueAt(selectedRow, 6); // Obtener el estado de la hormiga
+    
+            // Verificar si el estado es "Muerta"
+            if ("Muerta".equals(estado)) {
+                JOptionPane.showMessageDialog(this, "No se puede modificar una hormiga cuyo estado es 'Muerta'.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            } else {
+                tableModel.setValueAt(text, selectedRow, columnIndex); // Actualizar la celda solo si el estado no es "Muerta"
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecciona una fila en la tabla para actualizar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    // Método para verificar y actualizar la fila según las selecciones
+    private void checkAndUpdateRow() {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow != -1) {
+            String genoAlimento = (String) tableModel.getValueAt(selectedRow, 3);
+            String ingestaNativa = (String) tableModel.getValueAt(selectedRow, 4);
+    
+            // Verificar y actualizar el sexo y tipo de hormiga según genoAlimento
+            if ("XY".equals(genoAlimento)) {
+                tableModel.setValueAt("Macho", selectedRow, 1); // Actualizar el sexo a "Macho"
+                tableModel.setValueAt("Zangano", selectedRow, 5); // Actualizar el tipo de hormiga a "Zangano"
+            }
+    
+            // Verificar y actualizar el estado según ingestaNativa
+            if ("Carnivoro".equals(ingestaNativa) || "Herbivoro".equals(ingestaNativa) || "Omnivoro".equals(ingestaNativa)) {
+                tableModel.setValueAt("Viva", selectedRow, 6); // Establecer estado en "Viva"
+            } else if ("Insectivoros".equals(ingestaNativa)) {
+                tableModel.setValueAt("Muerta", selectedRow, 6); // Establecer estado en "Muerta"
+            } else {
+                // Si ingestaNativa está vacía, mantener el estado en "Viva"
+                if (ingestaNativa == null || ingestaNativa.trim().isEmpty()) {
+                    tableModel.setValueAt("Viva", selectedRow, 6); // Mantener estado en "Viva"
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecciona una fila en la tabla para actualizar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
     }
 
     // Método para guardar los datos en la base de datos
     private void saveData() {
-        HormigaDAO dao = new HormigaDAO();
-        try {
-            LocalDateTime now = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            String fechaCrea = now.format(formatter);
-
-            for (int row = 0; row < tableModel.getRowCount(); row++) {
-                String idHormigaText = tableModel.getValueAt(row, 0).toString().trim();
-                String idSexoText = tableModel.getValueAt(row, 1).toString().trim();
-                String idProvinciaText = tableModel.getValueAt(row, 2).toString().trim();
-                String idGenoAlimentoText = tableModel.getValueAt(row, 3).toString().trim();
-                String idIngestaNativaText = tableModel.getValueAt(row, 4).toString().trim();
-                String tipoHormiga = tableModel.getValueAt(row, 5).toString().trim();
-                String estado = tableModel.getValueAt(row, 6).toString().trim();
-
-                int idHormiga;
-                int idSexo;
-                int idProvincia;
-                int idGenoAlimento;
-                int idIngestaNativa;
-
-                // Intentar convertir los textos a enteros
-                try {
-                    idHormiga = Integer.parseInt(idHormigaText);
-                    idSexo = Integer.parseInt(idSexoText);
-                    idProvincia = Integer.parseInt(idProvinciaText);
-                    idGenoAlimento = Integer.parseInt(idGenoAlimentoText);
-                    idIngestaNativa = Integer.parseInt(idIngestaNativaText);
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(this, "Uno o más campos numéricos tienen un formato inválido. Asegúrate de que los campos numéricos contengan solo números enteros.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
+        int response = JOptionPane.showConfirmDialog(this,
+            "¿Estás seguro de guardar todo el hormiguero en la base de datos?", "Confirmación",
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+    
+        if (response == JOptionPane.YES_OPTION) {
+            HormigaDAO dao = new HormigaDAO();
+            try {
+                LocalDateTime now = LocalDateTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                String fechaCrea = now.format(formatter);
+    
+                for (int row = 0; row < tableModel.getRowCount(); row++) {
+                    String idHormigaText = tableModel.getValueAt(row, 0).toString().trim();
+                    String sexoText = tableModel.getValueAt(row, 1).toString().trim();
+                    String provinciaText = tableModel.getValueAt(row, 2).toString().trim();
+                    String genoAlimentoText = tableModel.getValueAt(row, 3).toString().trim();
+                    String ingestaNativaText = tableModel.getValueAt(row, 4).toString().trim();
+                    String tipoHormiga = tableModel.getValueAt(row, 5).toString().trim();
+                    String estado = tableModel.getValueAt(row, 6).toString().trim();
+    
+                    int idHormiga;
+                    int idSexo = getSexoId(sexoText);
+                    int idProvincia = getProvinciaId(provinciaText);
+                    int idGenoAlimento = getGenoAlimentoId(genoAlimentoText);
+                    int idIngestaNativa = getIngestaNativaId(ingestaNativaText);
+    
+                    // Intentar convertir el idHormiga a entero
+                    try {
+                        idHormiga = Integer.parseInt(idHormigaText);
+                    } catch (NumberFormatException e) {
+                        JOptionPane.showMessageDialog(this, "Uno o más campos numéricos tienen un formato inválido. Asegúrate de que los campos numéricos contengan solo números enteros.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+    
+                    // Crear el objeto DTO con la fecha actual
+                    HormigaDTO dto = new HormigaDTO(idHormiga, idSexo, idProvincia, idGenoAlimento, idIngestaNativa, tipoHormiga, estado, fechaCrea);
+    
+                    // Verificar que los campos numéricos no estén vacíos
+                    if (tipoHormiga.isEmpty() || estado.isEmpty() || idSexo == -1 || idProvincia == -1 || idGenoAlimento == -1 || idIngestaNativa == -1) {
+                        JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos de texto y selecciona opciones válidas.", "Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        dao.create(dto);
+                    }
                 }
-
-                // Crear el objeto DTO con la fecha actual
-                HormigaDTO dto = new HormigaDTO(idHormiga, idSexo, idProvincia, idGenoAlimento, idIngestaNativa, tipoHormiga, estado, fechaCrea);
-
-                // Verificar que los campos numéricos no estén vacíos
-                if (tipoHormiga.isEmpty() || estado.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos de texto.", "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    dao.create(dto);
-                    JOptionPane.showMessageDialog(this, "Datos guardados exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                }
+                JOptionPane.showMessageDialog(this, "Datos guardados exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+    
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error al guardar los datos en la base de datos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error inesperado: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Error al guardar los datos en la base de datos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error inesperado: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            // Si el usuario elige NO, no se hace nada
+            System.out.println("Guardado cancelado.");
         }
     }
+    
+    
+    private void deleteSelectedRow() {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow != -1) {
+            int response = JOptionPane.showConfirmDialog(this,
+                "¿Estás seguro de que deseas eliminar esta fila?", "Confirmación",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+            if (response == JOptionPane.YES_OPTION) {
+                tableModel.removeRow(selectedRow);
+                JOptionPane.showMessageDialog(this, "Fila eliminada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecciona una fila en la tabla para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+    class CustomTableModel extends DefaultTableModel {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            // No permitir edición si el estado es "Muerta"
+            String estado = (String) getValueAt(row, 6);
+            if ("Muerta".equals(estado)) {
+                return false;
+            }
+            return super.isCellEditable(row, column);
+        }
+    }
+
+
+    private int getSexoId(String sexo) {
+        switch (sexo) {
+            case "Macho":
+                return 1;
+            case "Hembra":
+                return 2;
+            case "Asexual":
+                return 3;
+            default:
+                return -1; // Indica un valor inválido
+        }
+    }
+    
+    private int getProvinciaId(String provincia) {
+        switch (provincia) {
+            case "Azuay":
+                return 1;
+            case "Bolívar":
+                return 2;
+            case "Cañar":
+                return 3;
+            case "Carchi":
+                return 4;
+            case "Chimborazo":
+                return 5;
+            case "Cotopaxi":
+                return 6;
+            case "Guayas":
+                return 7;
+            case "Imbabura":
+                return 8;
+            case "Loja":
+                return 9;
+            case "Los Ríos":
+                return 10;
+            case "Manabí":
+                return 11;
+            case "Morona Santiago":
+                return 12;
+            case "Napo":
+                return 13;
+            case "Pastaza":
+                return 14;
+            case "Pichincha":
+                return 15;
+            case "Santa Elena":
+                return 16;
+            case "Santo Domingo de los Tsáchilas":
+                return 17;
+            case "Tungurahua":
+                return 18;
+            case "Zamora-Chinchipe":
+                return 19;
+            case "Galápagos":
+                return 20;
+            case "Esmeraldas":
+                return 21;
+            case "Sucumbíos":
+                return 22;
+            case "Orellana":
+                return 23;
+            case "Isabela":
+                return 24;
+            default:
+                return -1; // Indica un valor inválido
+        }
+    }
+    
+    private int getGenoAlimentoId(String genoAlimento) {
+        switch (genoAlimento) {
+            case "X":
+                return 1;
+            case "XX":
+                return 2;
+            case "XY":
+                return 3;
+            default:
+                return -1; // Indica un valor inválido
+        }
+    }
+    
+    private int getIngestaNativaId(String ingestaNativa) {
+        switch (ingestaNativa) {
+            case "Carnivoro":
+                return 1;
+            case "Herbivoro":
+                return 2;
+            case "Omnivoro":
+                return 3;
+            case "Insectivoros":
+                return 4;
+            default:
+                return -1; // Indica un valor inválido
+        }
+    }
+    
 }

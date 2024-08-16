@@ -87,16 +87,36 @@ INSERT INTO Region (Nombre) VALUES
 ("Oriente"),
 ("Galápagos");
 
-INSERT INTO Provincia (IdRegion , IdPais, Nombre) VALUES 
-(2,1,"Pichincha"),
-(2,1,"Azuay"),
-(4,1,"Isabela"),
-(3,1,"Napo");
+INSERT INTO Provincia (IdRegion, IdPais, Nombre) VALUES 
+(2, 1, "Azuay"),
+(2, 1, "Bolívar"),
+(2, 1, "Cañar"),
+(2, 1, "Carchi"),
+(2, 1, "Chimborazo"),
+(2, 1, "Cotopaxi"),
+(2, 1, "Guayas"),
+(2, 1, "Imbabura"),
+(2, 1, "Loja"),
+(2, 1, "Los Ríos"),
+(2, 1, "Manabí"),
+(2, 1, "Morona Santiago"),
+(2, 1, "Napo"),
+(2, 1, "Pastaza"),
+(2, 1, "Pichincha"),
+(2, 1, "Santa Elena"),
+(2, 1, "Santo Domingo de los Tsáchilas"),
+(2, 1, "Tungurahua"),
+(2, 1, "Zamora-Chinchipe"),
+(1, 1, "Galápagos"),
+(3, 1, "Esmeraldas"),
+(3, 1, "Sucumbíos"),
+(3, 1, "Orellana"),
+(4, 1, "Isabela");
 
 INSERT INTO GenoAlimento (NombreTipo) VALUES 
-("X"),
-("XX"),
-("XY");
+    ("X"),
+    ("XX"),
+    ("XY");
 
 INSERT INTO IngestaNativa (Ingesta) VALUES 
 ("Carnívoro"),

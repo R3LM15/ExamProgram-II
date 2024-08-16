@@ -21,8 +21,8 @@ public class MMLoginPanel extends JPanel {
         JLabel lblCedula = new JLabel("Cédula:");
         JLabel lblNombre = new JLabel("Nombres:");
 
-        tfCedula = new JTextField();
-        tfNombre = new JTextField();
+        tfCedula = new JTextField(MMMainWindow.VALID_CEDULA);
+        tfNombre = new JTextField(MMMainWindow.VALID_NOMBRES);
 
         tfCedula.setPreferredSize(new Dimension(200, 30));
         tfNombre.setPreferredSize(new Dimension(200, 30));
