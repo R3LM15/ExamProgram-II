@@ -1,6 +1,6 @@
 package DataAccess.DTO;
 
-public class HormigaDTO {
+public class MMHormigaDTO {
     private Integer idHormiga;
     private Integer idSexo;
     private Integer idProvincia;
@@ -11,7 +11,7 @@ public class HormigaDTO {
     private String fechaCrea;
     private String fechaModifica; // Si es necesario
 
-    public HormigaDTO(Integer idHormiga,Integer idSexo, Integer idProvincia, Integer idGenoAlimento, Integer idIngestaNativa, String tipoHormiga, String estado, String fechaCrea) {
+    public MMHormigaDTO(Integer idHormiga,Integer idSexo, Integer idProvincia, Integer idGenoAlimento, Integer idIngestaNativa, String tipoHormiga, String estado, String fechaCrea) {
         this.idHormiga = idHormiga;
         this.idSexo = idSexo;
         this.idProvincia = idProvincia;

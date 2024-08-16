@@ -1,6 +1,6 @@
 package DataAccess;
 
-import DataAccess.DTO.HormigaDTO;
+import DataAccess.DTO.MMHormigaDTO;
 import Framework.MMException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,10 +12,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HormigaDAO extends SQLiteDataHelper implements IDAO<HormigaDTO> {
+public class MMHormigaDAO extends SQLiteDataHelper implements IDAO<MMHormigaDTO> {
 
     @Override
-    public boolean create(HormigaDTO entity) throws Exception {
+    public boolean create(MMHormigaDTO entity) throws Exception {
         String query = "INSERT INTO Hormiga (IdSexo, IdProvincia, IdGenoAlimento, IdIngestaNativa, TipoHormiga, Estado, FechaCrea) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = openConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -34,15 +34,15 @@ public class HormigaDAO extends SQLiteDataHelper implements IDAO<HormigaDTO> {
     }
 
     @Override
-    public List<HormigaDTO> readAll() throws Exception {
-        List<HormigaDTO> lst = new ArrayList<>();
+    public List<MMHormigaDTO> readAll() throws Exception {
+        List<MMHormigaDTO> lst = new ArrayList<>();
         String query = "SELECT IdHormiga, IdSexo, IdProvincia, IdGenoAlimento, IdIngestaNativa, TipoHormiga, Estado, FechaCrea FROM Hormiga WHERE Estado = 'A'";
         try (Connection conn = openConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
-                HormigaDTO u = new HormigaDTO(
+                MMHormigaDTO u = new MMHormigaDTO(
                     rs.getInt("IdHormiga"),
                     rs.getInt("IdSexo"),
                     rs.getInt("IdProvincia"),
@@ -61,7 +61,7 @@ public class HormigaDAO extends SQLiteDataHelper implements IDAO<HormigaDTO> {
     }
 
     @Override
-    public boolean update(HormigaDTO entity) throws Exception {
+    public boolean update(MMHormigaDTO entity) throws Exception {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         String query = "UPDATE Hormiga SET IdSexo = ?, IdProvincia = ?, IdGenoAlimento = ?, IdIngestaNativa = ?, TipoHormiga = ?, Estado = ?, FechaModifica = ? WHERE IdHormiga = ?";
@@ -97,8 +97,8 @@ public class HormigaDAO extends SQLiteDataHelper implements IDAO<HormigaDTO> {
     }
 
     @Override
-    public HormigaDTO readBy(Integer id) throws Exception {
-        HormigaDTO u = null;
+    public MMHormigaDTO readBy(Integer id) throws Exception {
+        MMHormigaDTO u = null;
         String query = "SELECT IdHormiga, IdSexo, IdProvincia, IdGenoAlimento, IdIngestaNativa, TipoHormiga, Estado, FechaCrea, FechaModifica " +
                        "FROM Hormiga " +
                        "WHERE IdHormiga = ? AND Estado = 'A'";
@@ -107,7 +107,7 @@ public class HormigaDAO extends SQLiteDataHelper implements IDAO<HormigaDTO> {
             pstmt.setInt(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    u = new HormigaDTO(
+                    u = new MMHormigaDTO(
                         rs.getInt("IdHormiga"),
                         rs.getInt("IdSexo"),
                         rs.getInt("IdProvincia"),

@@ -1,16 +1,16 @@
 package BusinessLogic;
 
-import DataAccess.DTO.HormigaDTO;
-import DataAccess.HormigaDAO;
+import DataAccess.DTO.MMHormigaDTO;
+import DataAccess.MMHormigaDAO;
 import java.sql.SQLException;
 
 public class HormigaManager {
 
-    private HormigaDAO hormigaDAO;
+    private MMHormigaDAO hormigaDAO;
 
     public HormigaManager() {
         try {
-            hormigaDAO = new HormigaDAO();
+            hormigaDAO = new MMHormigaDAO();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -20,7 +20,7 @@ public class HormigaManager {
                                Integer idIngestaNativa, String tipoHormiga, 
                                String estado, String fechaCrea) throws Exception {
         try {
-            HormigaDTO hormiga = new HormigaDTO(idHormiga, idSexo, idProvincia, idGenoAlimento, 
+            MMHormigaDTO hormiga = new MMHormigaDTO(idHormiga, idSexo, idProvincia, idGenoAlimento, 
                                                  idIngestaNativa, tipoHormiga, estado, fechaCrea);
             return hormigaDAO.create(hormiga);
         } catch (SQLException e) {
@@ -33,7 +33,7 @@ public class HormigaManager {
                                   Integer idGenoAlimento, Integer idIngestaNativa, 
                                   String tipoHormiga, String estado, String fechaCrea) throws Exception {
         try {
-            HormigaDTO hormiga = new HormigaDTO(idHormiga, idSexo, idProvincia, idGenoAlimento, 
+            MMHormigaDTO hormiga = new MMHormigaDTO(idHormiga, idSexo, idProvincia, idGenoAlimento, 
                                                  idIngestaNativa, tipoHormiga, estado, fechaCrea);
             return hormigaDAO.update(hormiga);
         } catch (SQLException e) {

@@ -1,22 +1,22 @@
 package BusinessLogic;
 
 
-import DataAccess.DTO.HormigaDTO;
-import DataAccess.HormigaDAO;
+import DataAccess.DTO.MMHormigaDTO;
+import DataAccess.MMHormigaDAO;
 
 public class HormigaService {
 
-    private HormigaDAO hormigaDAO;
+    private MMHormigaDAO hormigaDAO;
 
     public HormigaService() {
         try {
-            hormigaDAO = new HormigaDAO();
+            hormigaDAO = new MMHormigaDAO();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public boolean saveHormiga(HormigaDTO hormiga) throws Exception {
+    public boolean saveHormiga(MMHormigaDTO hormiga) throws Exception {
         return hormigaDAO.create(hormiga);
     }
 

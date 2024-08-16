@@ -1,7 +1,7 @@
 package UserInterface.Form;
 
-import DataAccess.DTO.HormigaDTO;
-import DataAccess.HormigaDAO;
+import DataAccess.DTO.MMHormigaDTO;
+import DataAccess.MMHormigaDAO;
 import UserInterface.MMStyle;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,14 +16,12 @@ import javax.swing.table.DefaultTableModel;
 
 public class MMRegisto extends JPanel {
 
-    // Variables para el JTable
     private DefaultTableModel tableModel;
-    private JTable table; // Agregado para acceder a la tabla en otros métodos
-    private int currentID; // Variable para almacenar el ID secuencial
+    private JTable table; 
+    private int currentID; 
 
-    // Variables para guardar la opción seleccionada
-    private String selectedGenoAlimento = "<GenoAlimento>";
-    private String selectedIngestaNativa = "<IngestaNativa>";
+    private String MMselectedGenoAlimento = "<GenoAlimento>";
+    private String MMselectedIngestaNativa = "<IngestaNativa>";
 
     public MMRegisto() {
         setLayout(new GridBagLayout());
@@ -69,10 +67,9 @@ public class MMRegisto extends JPanel {
         gbc.weighty = 0.1;
         add(secondPanel, gbc);
 
-        // Crear el JTable y el modelo
         String[] columnNames = {"ID", "Sexo", "Provincia", "GenoAlimento", "IngestaNativa", "TipoHormiga", "Estado"};
         tableModel = new DefaultTableModel(columnNames, 0);
-        table = new JTable(tableModel); // Inicializar el JTable
+        table = new JTable(tableModel); 
         table.setGridColor(Color.DARK_GRAY);
         table.setBackground(Color.GRAY);
         table.setForeground(Color.WHITE);
@@ -93,20 +90,19 @@ public class MMRegisto extends JPanel {
         GridBagConstraints gbcFourth = new GridBagConstraints();
         gbcFourth.insets = new Insets(10, 5, 10, 5);
 
-        JButton leftButton1 = new JButton(selectedGenoAlimento);
+        JButton leftButton1 = new JButton(MMselectedGenoAlimento);
         leftButton1.setBackground(Color.GRAY);
         leftButton1.setForeground(Color.WHITE);
         leftButton1.setPreferredSize(new Dimension(150, 50));
         leftButton1.setFocusPainted(false);
 
-        JButton leftButton2 = new JButton(selectedIngestaNativa);
+        JButton leftButton2 = new JButton(MMselectedIngestaNativa);
         leftButton2.setBackground(Color.GRAY);
         leftButton2.setForeground(Color.WHITE);
         leftButton2.setPreferredSize(new Dimension(150, 50));
         leftButton2.setFocusPainted(false);
 
         JPopupMenu popupMenu1 = new JPopupMenu();
-        // Actualizar opciones del menú emergente
         JMenuItem option1_1 = new JMenuItem("<GenoAlimento>");
         JMenuItem option1_2 = new JMenuItem("XY");
         JMenuItem option1_3 = new JMenuItem("XX"); 
@@ -115,7 +111,6 @@ public class MMRegisto extends JPanel {
         popupMenu1.add(option1_3);
 
         JPopupMenu popupMenu2 = new JPopupMenu();
-        // Actualizar opciones del menú emergente
         JMenuItem option2_1 = new JMenuItem("<IngestaNativa>");
         JMenuItem option2_2 = new JMenuItem("Carnivoro");
         JMenuItem option2_3 = new JMenuItem("Herbivoro");
@@ -127,18 +122,16 @@ public class MMRegisto extends JPanel {
         popupMenu2.add(option2_4);
         popupMenu2.add(option2_5);
 
-        // ActionListener para actualizar el texto del botón
         ActionListener updateSelectedOption = e -> {
             JMenuItem source = (JMenuItem) e.getSource();
             String selectedOption = source.getText();
 
-            // Determine qué botón fue clicado y actualiza el texto del botón
             if (source.getParent() == popupMenu1) {
-                selectedGenoAlimento = selectedOption;
-                leftButton1.setText(selectedGenoAlimento);
+                MMselectedGenoAlimento = selectedOption;
+                leftButton1.setText(MMselectedGenoAlimento);
             } else if (source.getParent() == popupMenu2) {
-                selectedIngestaNativa = selectedOption;
-                leftButton2.setText(selectedIngestaNativa);
+                MMselectedIngestaNativa = selectedOption;
+                leftButton2.setText(MMselectedIngestaNativa);
             }
         };
 
@@ -166,14 +159,13 @@ public class MMRegisto extends JPanel {
         createButton2.setPreferredSize(new Dimension(300, 50));
         createButton2.setFocusPainted(false);
 
-        // ActionListener para los botones de alimentación
         createButton1.addActionListener(e -> {
-            updateColumnWithText(3, selectedGenoAlimento);
+            updateColumnWithText(3, MMselectedGenoAlimento);
             checkAndUpdateRow();
         });
 
         createButton2.addActionListener(e -> {
-            updateColumnWithText(4, selectedIngestaNativa);
+            updateColumnWithText(4, MMselectedIngestaNativa);
             checkAndUpdateRow();
         });
 
@@ -201,7 +193,6 @@ public class MMRegisto extends JPanel {
         gbc.weighty = 0.3;
         add(fourthPanel, gbc);
 
-        // Crear el quinto panel
         JPanel fifthPanel = new JPanel();
         fifthPanel.setBackground(Color.LIGHT_GRAY);
         fifthPanel.setPreferredSize(new Dimension(580, 75));
@@ -224,19 +215,17 @@ public class MMRegisto extends JPanel {
         exitButton.setFocusPainted(false);
         exitButton.setBorder(border);
 
-        // Agregar el ActionListener para el botón "GUARDAR"
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                saveData();
+                MMsaveData();
             }
         });
 
-        // Agregar el ActionListener para el botón "ELIMINAR"
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                deleteSelectedRow();
+                MMdeleteSelectedRow();
             }
         });
 
@@ -247,10 +236,8 @@ public class MMRegisto extends JPanel {
         gbc.weighty = 0.1;
         add(fifthPanel, gbc);
 
-        // Inicializar el ID secuencial
-        currentID = 1; // O cualquier valor inicial que desees
+        currentID = 1; 
 
-        // ActionListener para el botón "Crear Hormiga larva"
         createButton.addActionListener(e -> {
             int response = JOptionPane.showConfirmDialog(this,
                 "¿Estás seguro de crear una hormiga larva?", "Confirmación",
@@ -262,20 +249,16 @@ public class MMRegisto extends JPanel {
         });
     }
 
-    // Método para agregar una nueva hormiga con datos predeterminados
     private void addNewHormiga() {
-        // Incrementar el ID secuencial
         int newID = currentID++;
 
-        // Datos predeterminados
         String sexo = "asexual";
         String provincia = getRandomProvincia();
-        String genoAlimento = selectedGenoAlimento;
-        String ingestaNativa = selectedIngestaNativa;
+        String genoAlimento = MMselectedGenoAlimento;
+        String ingestaNativa = MMselectedIngestaNativa;
         String tipoHormiga = "larva";
         String estado = "viva";
 
-        // Agregar la nueva fila al modelo de la tabla
         tableModel.addRow(new Object[] { newID, sexo, provincia, genoAlimento, ingestaNativa, tipoHormiga, estado });
     }
 
@@ -286,17 +269,15 @@ public class MMRegisto extends JPanel {
         return provincias[random.nextInt(provincias.length)];
     }
 
-    // Método para actualizar la columna con el texto seleccionado
     private void updateColumnWithText(int columnIndex, String text) {
-        int selectedRow = table.getSelectedRow(); // Obtener la fila seleccionada
-        if (selectedRow != -1) { // Verificar si hay una fila seleccionada
-            String estado = (String) tableModel.getValueAt(selectedRow, 6); // Obtener el estado de la hormiga
+        int selectedRow = table.getSelectedRow(); 
+        if (selectedRow != -1) { 
+            String estado = (String) tableModel.getValueAt(selectedRow, 6); 
     
-            // Verificar si el estado es "Muerta"
             if ("Muerta".equals(estado)) {
                 JOptionPane.showMessageDialog(this, "No se puede modificar una hormiga cuyo estado es 'Muerta'.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             } else {
-                tableModel.setValueAt(text, selectedRow, columnIndex); // Actualizar la celda solo si el estado no es "Muerta"
+                tableModel.setValueAt(text, selectedRow, columnIndex); 
             }
         } else {
             JOptionPane.showMessageDialog(this, "Selecciona una fila en la tabla para actualizar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -310,7 +291,6 @@ public class MMRegisto extends JPanel {
             String genoAlimento = (String) tableModel.getValueAt(selectedRow, 3);
             String ingestaNativa = (String) tableModel.getValueAt(selectedRow, 4);
     
-            // Verificar y actualizar el sexo y tipo de hormiga según genoAlimento
             if ("XY".equals(genoAlimento)) {
                 tableModel.setValueAt("Macho", selectedRow, 1); // Actualizar el sexo a "Macho"
                 tableModel.setValueAt("Zangano", selectedRow, 5); // Actualizar el tipo de hormiga a "Zangano"
@@ -318,13 +298,11 @@ public class MMRegisto extends JPanel {
     
             // Verificar y actualizar el estado según ingestaNativa
             if ("Carnivoro".equals(ingestaNativa) || "Herbivoro".equals(ingestaNativa) || "Omnivoro".equals(ingestaNativa)) {
-                tableModel.setValueAt("Viva", selectedRow, 6); // Establecer estado en "Viva"
+                tableModel.setValueAt("Viva", selectedRow, 6); 
             } else if ("Insectivoros".equals(ingestaNativa)) {
-                tableModel.setValueAt("Muerta", selectedRow, 6); // Establecer estado en "Muerta"
             } else {
                 // Si ingestaNativa está vacía, mantener el estado en "Viva"
                 if (ingestaNativa == null || ingestaNativa.trim().isEmpty()) {
-                    tableModel.setValueAt("Viva", selectedRow, 6); // Mantener estado en "Viva"
                 }
             }
         } else {
@@ -333,13 +311,13 @@ public class MMRegisto extends JPanel {
     }
 
     // Método para guardar los datos en la base de datos
-    private void saveData() {
+    private void MMsaveData() {
         int response = JOptionPane.showConfirmDialog(this,
             "¿Estás seguro de guardar todo el hormiguero en la base de datos?", "Confirmación",
             JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
     
         if (response == JOptionPane.YES_OPTION) {
-            HormigaDAO dao = new HormigaDAO();
+            MMHormigaDAO dao = new MMHormigaDAO();
             try {
                 LocalDateTime now = LocalDateTime.now();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -355,12 +333,11 @@ public class MMRegisto extends JPanel {
                     String estado = tableModel.getValueAt(row, 6).toString().trim();
     
                     int idHormiga;
-                    int idSexo = getSexoId(sexoText);
-                    int idProvincia = getProvinciaId(provinciaText);
-                    int idGenoAlimento = getGenoAlimentoId(genoAlimentoText);
-                    int idIngestaNativa = getIngestaNativaId(ingestaNativaText);
+                    int idSexo = MMgetSexoId(sexoText);
+                    int idProvincia = MMgetProvinciaId(provinciaText);
+                    int idGenoAlimento = MMgetGenoAlimentoId(genoAlimentoText);
+                    int idIngestaNativa = MMgetIngestaNativaId(ingestaNativaText);
     
-                    // Intentar convertir el idHormiga a entero
                     try {
                         idHormiga = Integer.parseInt(idHormigaText);
                     } catch (NumberFormatException e) {
@@ -368,10 +345,8 @@ public class MMRegisto extends JPanel {
                         return;
                     }
     
-                    // Crear el objeto DTO con la fecha actual
-                    HormigaDTO dto = new HormigaDTO(idHormiga, idSexo, idProvincia, idGenoAlimento, idIngestaNativa, tipoHormiga, estado, fechaCrea);
+                    MMHormigaDTO dto = new MMHormigaDTO(idHormiga, idSexo, idProvincia, idGenoAlimento, idIngestaNativa, tipoHormiga, estado, fechaCrea);
     
-                    // Verificar que los campos numéricos no estén vacíos
                     if (tipoHormiga.isEmpty() || estado.isEmpty() || idSexo == -1 || idProvincia == -1 || idGenoAlimento == -1 || idIngestaNativa == -1) {
                         JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos de texto y selecciona opciones válidas.", "Error", JOptionPane.ERROR_MESSAGE);
                     } else {
@@ -386,13 +361,12 @@ public class MMRegisto extends JPanel {
                 JOptionPane.showMessageDialog(this, "Error inesperado: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            // Si el usuario elige NO, no se hace nada
             System.out.println("Guardado cancelado.");
         }
     }
     
     
-    private void deleteSelectedRow() {
+    private void MMdeleteSelectedRow() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow != -1) {
             int response = JOptionPane.showConfirmDialog(this,
@@ -410,7 +384,6 @@ public class MMRegisto extends JPanel {
     class CustomTableModel extends DefaultTableModel {
         @Override
         public boolean isCellEditable(int row, int column) {
-            // No permitir edición si el estado es "Muerta"
             String estado = (String) getValueAt(row, 6);
             if ("Muerta".equals(estado)) {
                 return false;
@@ -420,7 +393,7 @@ public class MMRegisto extends JPanel {
     }
 
 
-    private int getSexoId(String sexo) {
+    private int MMgetSexoId(String sexo) {
         switch (sexo) {
             case "Macho":
                 return 1;
@@ -429,11 +402,11 @@ public class MMRegisto extends JPanel {
             case "Asexual":
                 return 3;
             default:
-                return -1; // Indica un valor inválido
+                return -1; 
         }
     }
     
-    private int getProvinciaId(String provincia) {
+    private int MMgetProvinciaId(String provincia) {
         switch (provincia) {
             case "Azuay":
                 return 1;
@@ -484,11 +457,11 @@ public class MMRegisto extends JPanel {
             case "Isabela":
                 return 24;
             default:
-                return -1; // Indica un valor inválido
+                return -1; 
         }
     }
     
-    private int getGenoAlimentoId(String genoAlimento) {
+    private int MMgetGenoAlimentoId(String genoAlimento) {
         switch (genoAlimento) {
             case "X":
                 return 1;
@@ -497,11 +470,11 @@ public class MMRegisto extends JPanel {
             case "XY":
                 return 3;
             default:
-                return -1; // Indica un valor inválido
+                return -1; 
         }
     }
     
-    private int getIngestaNativaId(String ingestaNativa) {
+    private int MMgetIngestaNativaId(String ingestaNativa) {
         switch (ingestaNativa) {
             case "Carnivoro":
                 return 1;
@@ -512,7 +485,7 @@ public class MMRegisto extends JPanel {
             case "Insectivoros":
                 return 4;
             default:
-                return -1; // Indica un valor inválido
+                return -1; 
         }
     }
     
