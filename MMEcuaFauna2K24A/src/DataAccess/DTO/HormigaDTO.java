@@ -1,140 +1,88 @@
 package DataAccess.DTO;
 
 public class HormigaDTO {
-    private Integer IdHormiga     ;           
-    private Integer IdSexo ;           
-    private Integer IdProvincia ;           
-    private Integer IdGenoAlimento ;           
-    private Integer IdIngestaNativa ;           
-    private String TipoHormiga         ;           
-    private String Estado         ;           
-    private String FechaCrea  ;            
+    private Integer idSexo;
+    private Integer idProvincia;
+    private Integer idGenoAlimento;
+    private Integer idIngestaNativa;
+    private String tipoHormiga;
+    private String estado;
+    private String fechaCrea;
+    private String fechaModifica; // Si es necesario
 
-    public HormigaDTO(Integer IdHormiga  , 
-                      Integer IdSexo, 
-                      Integer IdProvincia, 
-                      Integer IdGenoAlimento, 
-                      Integer IdIngestaNativa,
-                      String TipoHormiga, 
-                      String Estado, 
-                      String FechaCrea) {
-
-        this.IdHormiga         = IdHormiga;
-        this.IdSexo            = IdSexo;
-        this.IdProvincia       = IdProvincia;
-        this.IdGenoAlimento    = IdGenoAlimento;
-        this.IdIngestaNativa   = IdIngestaNativa;
-        this.TipoHormiga       = TipoHormiga;
-        this.Estado            = Estado;
-        this.FechaCrea         = FechaCrea;
+    public HormigaDTO(Integer idSexo, Integer idProvincia, Integer idGenoAlimento, Integer idIngestaNativa, String tipoHormiga, String estado, String fechaCrea) {
+        this.idSexo = idSexo;
+        this.idProvincia = idProvincia;
+        this.idGenoAlimento = idGenoAlimento;
+        this.idIngestaNativa = idIngestaNativa;
+        this.tipoHormiga = tipoHormiga;
+        this.estado = estado;
+        this.fechaCrea = fechaCrea;
+        this.fechaModifica = null; // O inicializar si es necesario
     }
 
-
-    public HormigaDTO(){}
-
-    public HormigaDTO(int aInt, int aInt0, int aInt1, int aInt2, String string, String string0, String string1, String string2, String string3) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
-
-
-    public Integer getIdHormiga() {
-        return IdHormiga;
-    }
-
-
-    public void setIdHormiga(Integer IdHormiga) {
-        this.IdHormiga = IdHormiga;
-    }
-
-
+    // Getters y Setters
     public Integer getIdSexo() {
-        return IdSexo;
+        return idSexo;
     }
-
 
     public void setIdSexo(Integer idSexo) {
-        IdSexo = idSexo;
+        this.idSexo = idSexo;
     }
-
 
     public Integer getIdProvincia() {
-        return IdProvincia;
+        return idProvincia;
     }
-
 
     public void setIdProvincia(Integer idProvincia) {
-        IdProvincia = idProvincia;
+        this.idProvincia = idProvincia;
     }
-
 
     public Integer getIdGenoAlimento() {
-        return IdGenoAlimento;
+        return idGenoAlimento;
     }
-
 
     public void setIdGenoAlimento(Integer idGenoAlimento) {
-        IdGenoAlimento = idGenoAlimento;
+        this.idGenoAlimento = idGenoAlimento;
     }
-
 
     public Integer getIdIngestaNativa() {
-        return IdIngestaNativa;
+        return idIngestaNativa;
     }
-
 
     public void setIdIngestaNativa(Integer idIngestaNativa) {
-        IdIngestaNativa = idIngestaNativa;
+        this.idIngestaNativa = idIngestaNativa;
     }
-
 
     public String getTipoHormiga() {
-        return TipoHormiga;
+        return tipoHormiga;
     }
-
 
     public void setTipoHormiga(String tipoHormiga) {
-        TipoHormiga = tipoHormiga;
+        this.tipoHormiga = tipoHormiga;
     }
-
 
     public String getEstado() {
-        return Estado;
+        return estado;
     }
-
 
     public void setEstado(String estado) {
-        Estado = estado;
+        this.estado = estado;
     }
-
 
     public String getFechaCrea() {
-        return FechaCrea;
+        return fechaCrea;
     }
-
 
     public void setFechaCrea(String fechaCrea) {
-        FechaCrea = fechaCrea;
+        this.fechaCrea = fechaCrea;
     }
 
-
-
-
-    @Override
-    public String toString(){
-        return  getClass().getName()
-                + "\n IdHormiga "           + getIdHormiga()
-                + "\n IdSexo "              + getIdSexo()
-                + "\n IdProvincia      "    + getIdProvincia()
-                + "\n IdGenoAlimento   "    + getIdGenoAlimento()
-                + "\n IdIngestaNativa  "    + getIdIngestaNativa()
-                + "\n TipoHormiga  "        + getTipoHormiga()
-                + "\n Estado  "             + getEstado()
-                + "\n FechaCrea  "          + getFechaCrea();
-                
+    public String getFechaModifica() {
+        return fechaModifica;
     }
 
+    public void setFechaModifica(String fechaModifica) {
+        this.fechaModifica = fechaModifica;
+    }
 }
-   
-
-  
