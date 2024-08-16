@@ -5,6 +5,7 @@ package UserInterface.Form;
 import UserInterface.IAStyle;
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.Border;
 
 
 public class MainWindow {
@@ -15,7 +16,7 @@ public class MainWindow {
     public MainWindow(String aplicación_de_Datos_de_Hormiga) {
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args ) {
         // Ejecutar en el hilo de eventos de Swing
         SwingUtilities.invokeLater(() -> {
             // Crear la ventana principal
@@ -30,35 +31,55 @@ public class MainWindow {
             
 
 //---------------------------------------------------------------------------------------------------------
-            // Crear el Primer panel 
-            JPanel FirstPanel = new JPanel();
-            FirstPanel.setBackground(Color.LIGHT_GRAY);
-            FirstPanel.setLayout(new GridBagLayout());
-            FirstPanel.setPreferredSize(new Dimension(580,75));
+JPanel FirstPanel = new JPanel();
+FirstPanel.setBackground(Color.LIGHT_GRAY);
+FirstPanel.setLayout(new GridBagLayout());
+FirstPanel.setPreferredSize(new Dimension(580, 75));
 
-            // Etiquetas para el número de cédula y nombres
-            JLabel lblCedula = new JLabel("Cédula:");
-            JLabel lblNombre = new JLabel("Nombres:");
-            JLabel mmCedula = new JLabel(mmcedula);
-            JLabel mmNombre = new JLabel(mmnombres);
+// Etiquetas para el número de cédula y nombres
+JLabel lblCedula = new JLabel("Cédula:");
+JLabel lblNombre = new JLabel("Nombres:");
 
-            // Configurar el GridBagConstraints para los componentes dentro del panel gris
-            GridBagConstraints gbcGray = new GridBagConstraints();
-            gbcGray.insets = new Insets(5, 100, 5, 100); // Espaciado dentro del panel gris
-            gbcGray.anchor = GridBagConstraints.WEST;
+// Crear JTextField no editables para mmCedula y mmNombre
+JTextField tfCedula = new JTextField(mmcedula);
+tfCedula.setEditable(false); // Hacer que el campo no sea editable
+tfCedula.setBackground(Color.GRAY); // Poner un fondo para que parezca más uniforme
+tfCedula.setBorder(BorderFactory.createEmptyBorder()); // Quitar el borde para una apariencia más limpia
 
-            FirstPanel.add(lblCedula, gbcGray);
-            FirstPanel.add(mmCedula, gbcGray);
-            gbcGray.gridy = 1;
-            FirstPanel.add(lblNombre, gbcGray);
-            FirstPanel.add(mmNombre, gbcGray);
+JTextField tfNombre = new JTextField(mmnombres);
+tfNombre.setEditable(false); // Hacer que el campo no sea editable
+tfNombre.setBackground(Color.GRAY); // Poner un fondo para que parezca más uniforme
+tfNombre.setBorder(BorderFactory.createEmptyBorder()); // Quitar el borde para una apariencia más limpia
 
-            // Añadir el panel gris a la ventana
-            gbc.gridx = 0;
-            gbc.gridy = 0;
-            gbc.weightx = 1.0;
-            gbc.weighty = 0.1; // Porcentaje de espacio vertical
-            frame.add(FirstPanel, gbc);
+// Configurar el GridBagConstraints para los componentes dentro del panel gris
+GridBagConstraints gbcGray = new GridBagConstraints();
+gbcGray.insets = new Insets(5, 5, 5, 5); // Espaciado dentro del panel gris
+gbcGray.anchor = GridBagConstraints.WEST; // Alinear al oeste (izquierda)
+gbcGray.fill = GridBagConstraints.HORIZONTAL; // Hacer que los campos de texto ocupen el espacio horizontal
+
+// Añadir componentes al panel gris
+gbcGray.gridx = 0; // Columna 0
+gbcGray.gridy = 0; // Fila 0
+FirstPanel.add(lblCedula, gbcGray);
+
+gbcGray.gridx = 1; // Columna 1
+gbcGray.weightx = 1.0; // Hacer que tfCedula ocupe el espacio restante
+FirstPanel.add(tfCedula, gbcGray);
+
+gbcGray.gridy = 1; // Fila 1
+gbcGray.gridx = 0; // Columna 0
+FirstPanel.add(lblNombre, gbcGray);
+
+gbcGray.gridx = 1; // Columna 1
+gbcGray.weightx = 1.0; // Hacer que tfNombre ocupe el espacio restante
+FirstPanel.add(tfNombre, gbcGray);
+
+// Añadir el panel gris a la ventana
+gbc.gridx = 0;
+gbc.gridy = 0;
+gbc.weightx = 1.0;
+gbc.weighty = 0.1; // Porcentaje de espacio vertical
+frame.add(FirstPanel, gbc);
 
 //---------------------------------------------------------------------------------------------------------
 
@@ -78,7 +99,7 @@ public class MainWindow {
             // Cargar y redimensionar el logo
             ImageIcon logoIcon = new ImageIcon(IAStyle.URL_LOGO); // Cambia el path a tu imagen
             Image logoImage = logoIcon.getImage();
-            Image resizedLogoImage = logoImage.getScaledInstance(50, 45, Image.SCALE_SMOOTH); // Ajustar tamaño (ancho, alto)
+            Image resizedLogoImage = logoImage.getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Ajustar tamaño (ancho, alto)
             ImageIcon resizedLogoIcon = new ImageIcon(resizedLogoImage);
 
             JLabel logoLabel = new JLabel(resizedLogoIcon);
@@ -99,7 +120,7 @@ public class MainWindow {
             JButton createButton = new JButton("Crear Hormiga larva");
             createButton.setBackground(Color.DARK_GRAY);
             createButton.setForeground(Color.WHITE);
-            createButton.setPreferredSize(new Dimension(350, 50)); // Ajuste del tamaño del botón
+            createButton.setPreferredSize(new Dimension(300, 50)); // Ajuste del tamaño del botón
             createButton.setFocusPainted(false); // Elimina el borde de enfoque del botón
 
             // Añadir el botón al panel derecho
@@ -142,92 +163,134 @@ gbc.weighty = 0.1;
 frame.add(thirdPanel, gbc);
 
 //---------------------------------------------------------------------------------------
-// Crear el cuarto panel
-    JPanel fourthPanel = new JPanel();
-    fourthPanel.setBackground(Color.WHITE);
-    fourthPanel.setPreferredSize(new Dimension(580, 150));
+       
+       // Crear el cuarto panel
+       JPanel fourthPanel = new JPanel();
+       fourthPanel.setPreferredSize(new Dimension(580, 150));
+       fourthPanel.setLayout(new GridBagLayout());
+       GridBagConstraints gbcFourth = new GridBagConstraints();
+       gbcFourth.insets = new Insets(10, 5, 10, 5); // Espaciado entre los componentes
+       
+       // Botones en la parte izquierda
+       JButton leftButton1 = new JButton("<GenoAlimento>");
+       leftButton1.setBackground(Color.GRAY);
+       leftButton1.setForeground(Color.WHITE);
+       leftButton1.setPreferredSize(new Dimension(150, 50));
+       leftButton1.setFocusPainted(false);
+       
+       JButton leftButton2 = new JButton("<IngestaNativa>");
+       leftButton2.setBackground(Color.GRAY);
+       leftButton2.setForeground(Color.WHITE);
+       leftButton2.setPreferredSize(new Dimension(150, 50));
+       leftButton2.setFocusPainted(false);
+       
+       // Crear JPopupMenu para leftButton1
+       JPopupMenu popupMenu1 = new JPopupMenu();
+       JMenuItem option1_1 = new JMenuItem("Opción 1.1");
+       JMenuItem option1_2 = new JMenuItem("Opción 1.2");
+       popupMenu1.add(option1_1);
+       popupMenu1.add(option1_2);
+       
+       // Crear JPopupMenu para leftButton2
+       JPopupMenu popupMenu2 = new JPopupMenu();
+       JMenuItem option2_1 = new JMenuItem("Opción 2.1");
+       JMenuItem option2_2 = new JMenuItem("Opción 2.2");
+       popupMenu2.add(option2_1);
+       popupMenu2.add(option2_2);
+       
+       // Asociar el popup menu a leftButton1 usando ActionListener
+       leftButton1.addActionListener(e -> {
+           popupMenu1.show(leftButton1, 0, leftButton1.getHeight());
+       });
+       
+       // Asociar el popup menu a leftButton2 usando ActionListener
+       leftButton2.addActionListener(e -> {
+           popupMenu2.show(leftButton2, 0, leftButton2.getHeight());
+       });
+       
+       // Botones en la parte derecha
+       JButton createButton1 = new JButton("Alimentar Con GenoAlimento");
+       createButton1.setBackground(Color.DARK_GRAY);
+       createButton1.setForeground(Color.WHITE);
+       createButton1.setPreferredSize(new Dimension(300, 50));
+       createButton1.setFocusPainted(false);
+       
+       JButton createButton2 = new JButton("Alimentar Con IngestaNativa");
+       createButton2.setBackground(Color.DARK_GRAY);
+       createButton2.setForeground(Color.WHITE);
+       createButton2.setPreferredSize(new Dimension(300, 50));
+       createButton2.setFocusPainted(false);
+       
+       // Configurar GridBagConstraints para los botones de la izquierda
+       gbcFourth.gridx = 0;
+       gbcFourth.gridy = 0;
+       gbcFourth.weightx = 0.5;
+       gbcFourth.fill = GridBagConstraints.VERTICAL;
+       gbcFourth.anchor = GridBagConstraints.WEST;
+       fourthPanel.add(leftButton1, gbcFourth);
+       
+       gbcFourth.gridy = 1;
+       fourthPanel.add(leftButton2, gbcFourth);
+       
+       // Configurar GridBagConstraints para los botones de la derecha
+       gbcFourth.gridx = 1;
+       gbcFourth.gridy = 0;
+       gbcFourth.weightx = 0.5;
+       gbcFourth.fill = GridBagConstraints.VERTICAL;
+       gbcFourth.anchor = GridBagConstraints.EAST;
+       fourthPanel.add(createButton1, gbcFourth);
+       
+       gbcFourth.gridy = 1;
+       fourthPanel.add(createButton2, gbcFourth);
+       
+       // Añadir el cuarto panel a la ventana
+       gbc.gridy = 3;
+       gbc.weighty = 0.1;
+       frame.add(fourthPanel, gbc);
+
+//----------------------------------------------------------------------
 
 
-    JButton button1 = new JButton("Botón 1");
+// Crear el quinto panel
+// Crear el quinto panel
+        JPanel fifthPanel = new JPanel();
+        fifthPanel.setBackground(Color.LIGHT_GRAY);
+        fifthPanel.setPreferredSize(new Dimension(580, 75));
+        fifthPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10)); // Alinear en el centro, con espaciado
 
-    JButton createButton1 = new JButton("Crear Hormiga larva");
-    createButton1.setBackground(Color.DARK_GRAY);
-    createButton1.setForeground(Color.WHITE);
-    createButton1.setPreferredSize(new Dimension(350, 50)); // Ajuste del tamaño del botón
-    createButton1.setFocusPainted(false); // Elimina el borde de enfoque del botón
+        // Crear un color celeste apagado
+        Color lightBlue = new Color(173, 216, 230); // Light Blue color
 
+        // Crear un borde azul más oscuro
+        Border border = BorderFactory.createLineBorder(new Color(70, 130, 180), 2); // Darker Blue color, 2px width
 
-    fourthPanel.add(button1);
+        // Crear los botones
+        JButton saveButton = new JButton("Guardar");
+        saveButton.setBackground(lightBlue);
+        saveButton.setForeground(Color.BLACK);
+        saveButton.setPreferredSize(new Dimension(150, 50));
+        saveButton.setFocusPainted(false); // Quitar borde de enfoque
+        saveButton.setBorder(border); // Aplicar borde
 
+        JButton exitButton = new JButton("Salir");
+        exitButton.setBackground(lightBlue);
+        exitButton.setForeground(Color.BLACK);
+        exitButton.setPreferredSize(new Dimension(150, 50));
+        exitButton.setFocusPainted(false); // Quitar borde de enfoque
+        exitButton.setBorder(border); // Aplicar borde
 
+        // Añadir los botones al panel
+        fifthPanel.add(saveButton);
+        fifthPanel.add(exitButton);
 
-
-    gbc.gridy = 3;
-    gbc.weighty = 0.1;
-    frame.add(fourthPanel, gbc);
-
-
-
-/* 
-// Configurar un GridLayout de 2 filas y 2 columnas
-fourthPanel.setLayout(new GridLayout(2, 2, 10, 10)); // Espaciado entre botones
-
-// Crear botones
-JButton button1 = new JButton("Botón 1");
-JButton button2 = new JButton("Botón 2");
-
-// Botones desplegables (de derecha)
-JButton dropDownButton1 = new JButton("Botón 3");
-JButton dropDownButton2 = new JButton("Botón 4");
-
-// Configurar el menú desplegable para el primer botón
-JPopupMenu dropDownMenu1 = new JPopupMenu();
-JMenuItem option1 = new JMenuItem("Opción 1");
-JMenuItem option2 = new JMenuItem("Opción 2");
-dropDownMenu1.add(option1);
-dropDownMenu1.add(option2);
-dropDownButton1.addActionListener(e -> dropDownMenu1.show(dropDownButton1, 0, dropDownButton1.getHeight()));
-
-// Configurar el menú desplegable para el segundo botón
-JPopupMenu dropDownMenu2 = new JPopupMenu();
-JMenuItem option3 = new JMenuItem("Opción 3");
-JMenuItem option4 = new JMenuItem("Opción 4");
-dropDownMenu2.add(option3);
-dropDownMenu2.add(option4);
-dropDownButton2.addActionListener(e -> dropDownMenu2.show(dropDownButton2, 0, dropDownButton2.getHeight()));
-
-// Añadir botones al panel
-fourthPanel.add(button1);
-fourthPanel.add(button2);
-fourthPanel.add(dropDownButton1);
-fourthPanel.add(dropDownButton2);
-
-// Añadir el cuarto panel a la ventana
-gbc.gridy = 3;
-gbc.weighty = 0.1;
-frame.add(fourthPanel, gbc);
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        // Añadir el quinto panel a la ventana
+        gbc.gridy = 4; // Ajusta el índice de fila según sea necesario
+        gbc.weighty = 0.1;
+        frame.add(fifthPanel, gbc);
 
 
             // Mostrar la ventana
+            frame.setResizable(false);
             frame.pack();
             frame.setVisible(true);
 
