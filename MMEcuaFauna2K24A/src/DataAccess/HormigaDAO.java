@@ -17,9 +17,8 @@ public class HormigaDAO extends SQLiteDataHelper implements IDAO<HormigaDTO> {
     @Override
     public boolean create(HormigaDTO entity) throws Exception {
         String query = "INSERT INTO Hormiga (IdSexo, IdProvincia, IdGenoAlimento, IdIngestaNativa, TipoHormiga, Estado, FechaCrea) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try {
-            Connection conn = openConnection();
-            PreparedStatement pstmt = conn.prepareStatement(query);
+        try (Connection conn = openConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, entity.getIdSexo());
             pstmt.setInt(2, entity.getIdProvincia());
             pstmt.setInt(3, entity.getIdGenoAlimento());
@@ -37,13 +36,14 @@ public class HormigaDAO extends SQLiteDataHelper implements IDAO<HormigaDTO> {
     @Override
     public List<HormigaDTO> readAll() throws Exception {
         List<HormigaDTO> lst = new ArrayList<>();
-        String query = "SELECT IdSexo, IdProvincia, IdGenoAlimento, IdIngestaNativa, TipoHormiga, Estado, FechaCrea FROM Hormiga WHERE Estado = 'A'";
-        try {
-            Connection conn = openConnection();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+        String query = "SELECT IdHormiga, IdSexo, IdProvincia, IdGenoAlimento, IdIngestaNativa, TipoHormiga, Estado, FechaCrea FROM Hormiga WHERE Estado = 'A'";
+        try (Connection conn = openConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
             while (rs.next()) {
                 HormigaDTO u = new HormigaDTO(
+                    rs.getInt("IdHormiga"),
                     rs.getInt("IdSexo"),
                     rs.getInt("IdProvincia"),
                     rs.getInt("IdGenoAlimento"),
@@ -65,9 +65,8 @@ public class HormigaDAO extends SQLiteDataHelper implements IDAO<HormigaDTO> {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         String query = "UPDATE Hormiga SET IdSexo = ?, IdProvincia = ?, IdGenoAlimento = ?, IdIngestaNativa = ?, TipoHormiga = ?, Estado = ?, FechaModifica = ? WHERE IdHormiga = ?";
-        try {
-            Connection conn = openConnection();
-            PreparedStatement pstmt = conn.prepareStatement(query);
+        try (Connection conn = openConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, entity.getIdSexo());
             pstmt.setInt(2, entity.getIdProvincia());
             pstmt.setInt(3, entity.getIdGenoAlimento());
@@ -75,6 +74,7 @@ public class HormigaDAO extends SQLiteDataHelper implements IDAO<HormigaDTO> {
             pstmt.setString(5, entity.getTipoHormiga());
             pstmt.setString(6, entity.getEstado());
             pstmt.setString(7, dtf.format(now).toString());
+            pstmt.setInt(8, entity.getIdHormiga());
             pstmt.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -85,9 +85,8 @@ public class HormigaDAO extends SQLiteDataHelper implements IDAO<HormigaDTO> {
     @Override
     public boolean delete(int id) throws Exception {
         String query = "UPDATE Hormiga SET Estado = ? WHERE IdHormiga = ?";
-        try {
-            Connection conn = openConnection();
-            PreparedStatement pstmt = conn.prepareStatement(query);
+        try (Connection conn = openConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, "X");
             pstmt.setInt(2, id);
             pstmt.executeUpdate();
@@ -103,21 +102,22 @@ public class HormigaDAO extends SQLiteDataHelper implements IDAO<HormigaDTO> {
         String query = "SELECT IdHormiga, IdSexo, IdProvincia, IdGenoAlimento, IdIngestaNativa, TipoHormiga, Estado, FechaCrea, FechaModifica " +
                        "FROM Hormiga " +
                        "WHERE IdHormiga = ? AND Estado = 'A'";
-        try {
-            Connection conn = openConnection();
-            PreparedStatement pstmt = conn.prepareStatement(query);
+        try (Connection conn = openConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                u = new HormigaDTO(
-                    rs.getInt("IdSexo"),
-                    rs.getInt("IdProvincia"),
-                    rs.getInt("IdGenoAlimento"),
-                    rs.getInt("IdIngestaNativa"),
-                    rs.getString("TipoHormiga"),
-                    rs.getString("Estado"),
-                    rs.getString("FechaCrea")
-                );
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    u = new HormigaDTO(
+                        rs.getInt("IdHormiga"),
+                        rs.getInt("IdSexo"),
+                        rs.getInt("IdProvincia"),
+                        rs.getInt("IdGenoAlimento"),
+                        rs.getInt("IdIngestaNativa"),
+                        rs.getString("TipoHormiga"),
+                        rs.getString("Estado"),
+                        rs.getString("FechaCrea")
+                    );
+                }
             }
         } catch (SQLException e) {
             throw new MMException(e.getMessage(), getClass().getName(), "readBy()");
@@ -127,10 +127,9 @@ public class HormigaDAO extends SQLiteDataHelper implements IDAO<HormigaDTO> {
 
     public Integer getRowCount() throws Exception {
         String query = "SELECT COUNT(*) AS TotalReg FROM Hormiga WHERE Estado = 'A'";
-        try {
-            Connection conn = openConnection();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+        try (Connection conn = openConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
             if (rs.next()) {
                 return rs.getInt("TotalReg");
             }

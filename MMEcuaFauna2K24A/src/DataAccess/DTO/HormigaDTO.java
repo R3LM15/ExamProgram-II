@@ -1,6 +1,7 @@
 package DataAccess.DTO;
 
 public class HormigaDTO {
+    private Integer idHormiga;
     private Integer idSexo;
     private Integer idProvincia;
     private Integer idGenoAlimento;
@@ -10,7 +11,8 @@ public class HormigaDTO {
     private String fechaCrea;
     private String fechaModifica; // Si es necesario
 
-    public HormigaDTO(Integer idSexo, Integer idProvincia, Integer idGenoAlimento, Integer idIngestaNativa, String tipoHormiga, String estado, String fechaCrea) {
+    public HormigaDTO(Integer idHormiga,Integer idSexo, Integer idProvincia, Integer idGenoAlimento, Integer idIngestaNativa, String tipoHormiga, String estado, String fechaCrea) {
+        this.idHormiga = idHormiga;
         this.idSexo = idSexo;
         this.idProvincia = idProvincia;
         this.idGenoAlimento = idGenoAlimento;
@@ -22,6 +24,14 @@ public class HormigaDTO {
     }
 
     // Getters y Setters
+    public Integer getIdHormiga() {
+        return idHormiga;
+    }
+
+    public void setIdHormiga(Integer idHormiga) {
+        this.idHormiga = idHormiga;
+    }
+    
     public Integer getIdSexo() {
         return idSexo;
     }

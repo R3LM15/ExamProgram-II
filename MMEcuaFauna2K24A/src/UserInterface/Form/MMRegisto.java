@@ -9,14 +9,16 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
+import java.util.Random;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.table.DefaultTableModel;
 
 public class MMRegisto extends JPanel {
 
-    // Crear una matriz para almacenar los JTextField
-    private JTextField[][] textFields;
+    // Variables para el JTable
+    private DefaultTableModel tableModel;
+    private int currentID; // Variable para almacenar el ID secuencial
 
     public MMRegisto() {
         setLayout(new GridBagLayout());
@@ -62,47 +64,22 @@ public class MMRegisto extends JPanel {
         gbc.weighty = 0.1;
         add(secondPanel, gbc);
 
-        // Crear el tercer panel
-        JPanel thirdPanel = new JPanel();
-        thirdPanel.setPreferredSize(new Dimension(580, 150));
-        thirdPanel.setLayout(new GridLayout(3, 6, 5, 5)); // Aumentar filas para incluir encabezados
+        // Crear el JTable y el modelo
+        String[] columnNames = {"ID", "Sexo", "Provincia", "GenoAlimento", "IngestaNativa", "TipoHormiga", "Estado"};
+        tableModel = new DefaultTableModel(columnNames, 0);
+        JTable table = new JTable(tableModel);
+        table.setGridColor(Color.DARK_GRAY);
+        table.setBackground(Color.GRAY);
+        table.setForeground(Color.WHITE);
+        table.setSelectionBackground(Color.LIGHT_GRAY);
+        table.setSelectionForeground(Color.BLACK);
 
-        // Configurar el borde gris oscuro
-        Border darkGrayBorder = BorderFactory.createLineBorder(Color.DARK_GRAY, 2);
-
-        // Encabezados para la primera fila
-        String[] headers = {"Sexo", "Provincia", "GenoAlimento", "IngestaNativa", "TipoHormiga", "Estado"};
-
-        for (String header : headers) {
-            JLabel headerLabel = new JLabel(header);
-            headerLabel.setHorizontalAlignment(JLabel.CENTER);
-            headerLabel.setBackground(Color.LIGHT_GRAY);
-            headerLabel.setOpaque(true); // Necesario para que el fondo se muestre
-            headerLabel.setBorder(darkGrayBorder);
-            thirdPanel.add(headerLabel);
-        }
-
-        // Inicializar la matriz de JTextField con 2 filas
-        textFields = new JTextField[2][6];
-
-        // Agregar JTextField a partir de la segunda fila
-        for (int row = 0; row < 2; row++) { // Cambiar a 2 filas
-            for (int col = 0; col < 6; col++) {
-                JTextField cellTextField = new JTextField("");
-                cellTextField.setBackground(Color.GRAY);
-                cellTextField.setForeground(Color.WHITE);
-                cellTextField.setPreferredSize(new Dimension(90, 40));
-                cellTextField.setHorizontalAlignment(JTextField.CENTER);
-                cellTextField.setBorder(darkGrayBorder); // Aplicar el borde gris oscuro
-
-                textFields[row][col] = cellTextField;
-                thirdPanel.add(cellTextField);
-            }
-        }
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setPreferredSize(new Dimension(580, 150));
 
         gbc.gridy = 1;
         gbc.weighty = 0.3;
-        add(thirdPanel, gbc);
+        add(scrollPane, gbc);
 
         // Crear el cuarto panel
         JPanel fourthPanel = new JPanel();
@@ -142,9 +119,9 @@ public class MMRegisto extends JPanel {
 
             // Determine which button was clicked and which column to update
             if (source.getParent() == popupMenu1) {
-                updateColumnWithText(2, selectedOption); // Columna "GenoAlimento"
+                updateColumnWithText(3, selectedOption); // Columna "GenoAlimento"
             } else if (source.getParent() == popupMenu2) {
-                updateColumnWithText(3, selectedOption); // Columna "IngestaNativa"
+                updateColumnWithText(4, selectedOption); // Columna "IngestaNativa"
             }
         };
 
@@ -229,12 +206,50 @@ public class MMRegisto extends JPanel {
         gbc.gridy = 3;
         gbc.weighty = 0.1;
         add(fifthPanel, gbc);
+
+        // Inicializar el ID secuencial
+        currentID = 1; // O cualquier valor inicial que desees
+
+        // ActionListener para el botón "Crear Hormiga larva"
+        createButton.addActionListener(e -> {
+            int response = JOptionPane.showConfirmDialog(this,
+                "¿Estás seguro de crear una hormiga larva?", "Confirmación",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+            if (response == JOptionPane.YES_OPTION) {
+                addNewHormiga();
+            }
+        });
+    }
+
+    // Método para agregar una nueva hormiga con datos predeterminados
+    private void addNewHormiga() {
+        // Incrementar el ID secuencial
+        int newID = currentID++;
+
+        // Datos predeterminados
+        String sexo = "asexual";
+        String provincia = getRandomProvincia();
+        String genoAlimento = "";
+        String ingestaNativa = "";
+        String tipoHormiga = "larva";
+        String estado = "viva";
+
+        // Agregar la nueva fila al modelo de la tabla
+        tableModel.addRow(new Object[] { newID, sexo, provincia, genoAlimento, ingestaNativa, tipoHormiga, estado });
+    }
+
+    // Método para obtener una provincia aleatoria
+    private String getRandomProvincia() {
+        String[] provincias = {"Azuay", "Bolívar", "Cañar", "Carchi", "Chimborazo", "Cotopaxi", "El Oro", "Esmeraldas", "Galápagos", "Guayas", "Imbabura", "Loja", "Los Ríos", "Manabí", "Morona Santiago", "Napo", "Orellana", "Pastaza", "Pichincha", "Santa Elena", "Santo Domingo de los Tsáchilas", "Sucumbíos", "Tungurahua", "Zamora-Chinchipe"};
+        Random random = new Random();
+        return provincias[random.nextInt(provincias.length)];
     }
 
     // Método para actualizar la columna con la opción seleccionada
     private void updateColumnWithText(int columnIndex, String text) {
-        for (int row = 0; row < textFields.length; row++) {
-            textFields[row][columnIndex].setText(text);
+        for (int row = 0; row < tableModel.getRowCount(); row++) {
+            tableModel.setValueAt(text, row, columnIndex);
         }
     }
 
@@ -245,24 +260,25 @@ public class MMRegisto extends JPanel {
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String fechaCrea = now.format(formatter);
-            
-            for (int row = 0; row < textFields.length; row++) {
-                String idSexoText = textFields[row][0].getText().trim();
-                String idProvinciaText = textFields[row][1].getText().trim();
-                String idGenoAlimentoText = textFields[row][2].getText().trim();
-                String idIngestaNativaText = textFields[row][3].getText().trim();
-                String tipoHormiga = textFields[row][4].getText().trim();
-                String estado = textFields[row][5].getText().trim();
-        
-                
-    
+
+            for (int row = 0; row < tableModel.getRowCount(); row++) {
+                String idHormigaText = tableModel.getValueAt(row, 0).toString().trim();
+                String idSexoText = tableModel.getValueAt(row, 1).toString().trim();
+                String idProvinciaText = tableModel.getValueAt(row, 2).toString().trim();
+                String idGenoAlimentoText = tableModel.getValueAt(row, 3).toString().trim();
+                String idIngestaNativaText = tableModel.getValueAt(row, 4).toString().trim();
+                String tipoHormiga = tableModel.getValueAt(row, 5).toString().trim();
+                String estado = tableModel.getValueAt(row, 6).toString().trim();
+
+                int idHormiga;
                 int idSexo;
                 int idProvincia;
                 int idGenoAlimento;
                 int idIngestaNativa;
-    
+
                 // Intentar convertir los textos a enteros
                 try {
+                    idHormiga = Integer.parseInt(idHormigaText);
                     idSexo = Integer.parseInt(idSexoText);
                     idProvincia = Integer.parseInt(idProvinciaText);
                     idGenoAlimento = Integer.parseInt(idGenoAlimentoText);
@@ -271,36 +287,23 @@ public class MMRegisto extends JPanel {
                     JOptionPane.showMessageDialog(this, "Uno o más campos numéricos tienen un formato inválido. Asegúrate de que los campos numéricos contengan solo números enteros.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-        /* 
-                // Verificar que tipoHormiga y estado no estén vacíos
+
+                // Crear el objeto DTO con la fecha actual
+                HormigaDTO dto = new HormigaDTO(idHormiga, idSexo, idProvincia, idGenoAlimento, idIngestaNativa, tipoHormiga, estado, fechaCrea);
+
+                // Verificar que los campos numéricos no estén vacíos
                 if (tipoHormiga.isEmpty() || estado.isEmpty()) {
                     JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos de texto.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-        */
-                // Crear el objeto DTO con la fecha actual
-                HormigaDTO dto = new HormigaDTO(idSexo, idProvincia, idGenoAlimento, idIngestaNativa, tipoHormiga, estado, fechaCrea);
-        
-                // Guardar en la base de datos
-                // Verificar que los campos numéricos no estén vacíos
-                if (idSexoText.isEmpty() || idProvinciaText.isEmpty() || idGenoAlimentoText.isEmpty() || idIngestaNativaText.isEmpty()||tipoHormiga.isEmpty() || estado.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos numéricos y de texto ", "Error", JOptionPane.ERROR_MESSAGE);
-                }else{
+                } else {
                     dao.create(dto);
                     JOptionPane.showMessageDialog(this, "Datos guardados exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
-        
-            
-        
+
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al guardar los datos en la base de datos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error inesperado: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-
-
-
 }

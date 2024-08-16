@@ -16,12 +16,12 @@ public class HormigaManager {
         }
     }
 
-    public boolean saveHormiga(Integer idSexo, Integer idProvincia, Integer idGenoAlimento, 
+    public boolean saveHormiga(Integer idHormiga, Integer idSexo, Integer idProvincia, Integer idGenoAlimento, 
                                Integer idIngestaNativa, String tipoHormiga, 
                                String estado, String fechaCrea) throws Exception {
         try {
-            HormigaDTO hormiga = new HormigaDTO(null, idSexo, idProvincia, idGenoAlimento, 
-                                                 tipoHormiga, estado, fechaCrea);
+            HormigaDTO hormiga = new HormigaDTO(idHormiga, idSexo, idProvincia, idGenoAlimento, 
+                                                 idIngestaNativa, tipoHormiga, estado, fechaCrea);
             return hormigaDAO.create(hormiga);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -34,7 +34,7 @@ public class HormigaManager {
                                   String tipoHormiga, String estado, String fechaCrea) throws Exception {
         try {
             HormigaDTO hormiga = new HormigaDTO(idHormiga, idSexo, idProvincia, idGenoAlimento, 
-                                                 tipoHormiga, estado, fechaCrea);
+                                                 idIngestaNativa, tipoHormiga, estado, fechaCrea);
             return hormigaDAO.update(hormiga);
         } catch (SQLException e) {
             e.printStackTrace();
